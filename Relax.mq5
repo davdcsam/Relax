@@ -7,44 +7,9 @@
 #property link      "https://github.com/davdcsam"
 #property version   "1.0"
 
-#include  "features\\send_order.mq5"
-
-
-enum turn
-  {
-      ON,
-      OFF
-  };
-
-input string description_trade = "Data Trade";//...
-
-input ENUM_ORDER_TYPE select_operation = ORDER_TYPE_BUY;// Select Type of Operation
-
-input double lot = 1;//Lot Size
-
-input double stoplose = 1500;//Stop Lose
-
-input double takeprofit =  1500;//Take Profit
-
-input uint magic_number = 666;//Magic Number
-
-input int delay_time = 0; //Delay Time
-
-input ulong deviation_trade = 10; //Deviation in Point
-
-input turn only_me_index = ON; //Only Me /////////////////////////////////////
-
-input int only_me_limit = 0; //Max Operation Open ///////////////////////////////
-
-double price_ask;
-
-double price_bid;
-
-double tick_size;
-
-string comment_trade;
-
-
+#include  "features\\timer.mqh"
+#include  "features\\send_order.mqh"
+#include  "features\\enum.mqh"
 
 input string description_st = "SuperTrend"; //...
 
@@ -68,9 +33,12 @@ string st_color[30];
 
 string st_string;
 
+turn color_status = OFF;
+
 MqlTick tick[];
 
 MqlRates rates[];
+
 
 int OnInit() 
     {
@@ -96,17 +64,7 @@ void OnDeinit( const int reason )
     
 void OnTick(void)
     {
-        
-        price_ask                              = SymbolInfoDouble( _Symbol, SYMBOL_ASK );
-   
-        price_bid                              = SymbolInfoDouble( _Symbol, SYMBOL_BID );
-   
-        tick_size                              = SymbolInfoDouble( _Symbol, SYMBOL_TRADE_TICK_SIZE );
-   
-        price_ask                              = round( price_ask / tick_size ) * tick_size;
-   
-        price_bid                              = round( price_bid / tick_size ) * tick_size;        
-        
+         
         CopyBuffer(st_h, 0, 0, 30, st_red);
        
         CopyBuffer(st_h, 1, 0, 30, st_green);
@@ -115,7 +73,9 @@ void OnTick(void)
         
         CopyRates(_Symbol, 0, 0, 30, rates);
         
-        for(int i=1 ; i < 30; i++)
+        remain_timer();
+        
+        for(int i = 1 ; i < 30; i++)
             {
             
                 if(st_red[i-1] > rates[i-1].close) 
@@ -126,19 +86,46 @@ void OnTick(void)
                     } else st_color[i-1] = "GREEN";
            
             }
-        
-    
+            
+        if(st_color[4] == "RED" && st_color[3] == "GREEN" && st_color[2] == "GREEN" && st_color[1] == "GREEN" && st_color[0] == "GREEN")
+            {
+                color_status = ON;    
+            }
+
+        if(color_status == ON && remain_time == current_period)        
+            {
+                
+                color_status = OFF;
+                
+                if(select_operation == ORDER_TYPE_BUY) buy_function(); 
+                
+                else if(select_operation == ORDER_TYPE_SELL) sell_function();
+                
+            }   
+
+
+
         st_string = 
-            " st red " + DoubleToString(st_red[0]) +
+            "      st red " + DoubleToString(st_red[0], 3) +
             " | " 
-            " st green " + DoubleToString(st_green[0]) +
+            " st green " + DoubleToString(st_green[0], 3) +
             " | "
-            " st " + DoubleToString(st[0]);
+            " st " + DoubleToString(st[0], 3);
     
         Comment(
-            
-                st_string
-            
+               "\n"  
+               "      Time Broker                ",         current_time,
+               "\n"
+               "      Remain Time               ",          remain_time,
+               "\n",               
+               "      Status                        ",      EnumToString(color_status),  
+               "\n",     
+               st_string,
+               "\n",                 
+               "      ", st_color[4], " ",st_color[3], " ",st_color[2], " ",st_color[1], " ",st_color[0],
+               "\n"       
             );
-            
+        
+        Print(DoubleToString(st_red[0]));
+
     }
