@@ -4,6 +4,17 @@ enum turn
         OFF
     };
 
+enum type_color
+    {
+        WHITE,
+        GRAY,
+        BLACK,
+        GREEN,
+        YELLOW,
+        ORANGE,
+        RED
+    };
+
 enum type_swap
     {
         STANDARD,
@@ -15,25 +26,11 @@ enum type_trend
         BEARISH,
         BULLISH
     };
-   
-enum where 
-    {
-       DOWN,
-        UP
-    };
 
 enum type_stop_drawdown
     {
         INIT,
         STEP
-    };   
-
-enum type_zone_balance
-    {
-        GREEN,
-        WHITE,
-        YELLOW,
-        RED
     };
     
 enum type_trailing_stop
@@ -47,4 +44,11 @@ enum result_type
         NONE,
         TAKEPROFIT,
         STOPLOSS
+    };
+
+
+enum where 
+    {
+       DOWN,
+        UP
     };

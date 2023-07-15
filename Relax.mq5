@@ -10,48 +10,65 @@
 #include  "features\\timer.mqh"
 #include  "features\\send_order.mqh"
 #include  "features\\enum.mqh"
+#include  "features\\supertrend.mqh"
+#include  "features\\last_error.mqh"
 
-input string description_st = "SuperTrend"; //...
-
-input int st_periode = 10; //Period
-
-input double st_multiplier = 1; //Multiplier
-
-input bool st_show_filling = true;
-
-string st_name = "indicators\\st";
-
-int st_h;
-
-double st_red[];
-
-double st_green[];
-
-double st[];
-
-string st_color[30];
-
-string st_string;
-
-turn color_status = OFF;
-
-MqlTick tick[];
-
-MqlRates rates[];
-
+void operation_module()
+    {
+        switch(st_count)
+            {
+                case 1:
+                    if(st_color[2] == st_contrast_select_color && st_color[1] == st_select_color && st_color[0] == st_select_color)
+                        {
+                            trade_state = ON;
+                        }
+                 break;
+                                  
+                case 2:
+                    if(st_color[3] == st_contrast_select_color && st_color[2] == st_select_color && st_color[1] == st_select_color && st_color[0] == st_select_color)
+                        {
+                            trade_state = ON;
+                        }
+                 break;
+                 
+                case 3:
+                    if(st_color[4] == st_contrast_select_color && st_color[3] == st_select_color && st_color[2] == st_select_color  && st_color[1] == st_select_color && st_color[0] == st_select_color)
+                        {
+                            trade_state = ON;
+                        }
+                 break;
+                case 4:
+                    if(st_color[5] == st_contrast_select_color && st_color[4] == st_select_color && st_color[3] == st_select_color  && st_color[2] == st_select_color && st_color[1] == st_select_color && st_color[0] == st_select_color)
+                        {
+                            trade_state = ON;
+                        }
+                 break;                 
+                case 5:
+                    if(st_color[6] == st_contrast_select_color && st_color[5] == st_select_color && st_color[4] == st_select_color  && st_color[3] == st_select_color && st_color[2] == st_select_color && st_color[1] == st_select_color && st_color[0] == st_select_color)
+                        {
+                            trade_state = ON;
+                        }
+                 break;
+                 
+                default:
+                    last_error = "Out Range in Swicth Operator / Operation Module";
+                 break;
+            }
+            
+        if(trade_state == ON)        
+            {   
+                type_operation_function();
+                
+                trade_state = OFF;
+            }            
+    }
 
 int OnInit() 
     {
         
-        st_h = iCustom( _Symbol, PERIOD_CURRENT, st_name, st_periode, st_multiplier, st_show_filling);
+        supertrend_onint();
     
-        ArraySetAsSeries(st_red, true);
-        
-        ArraySetAsSeries(st_green, true);
-
-        ArraySetAsSeries(st, true);     
-            
-        ArraySetAsSeries(rates, true);
+        last_error_oninit();
     
         return( INIT_SUCCEEDED );
         
@@ -64,68 +81,28 @@ void OnDeinit( const int reason )
     
 void OnTick(void)
     {
-         
-        CopyBuffer(st_h, 0, 0, 30, st_red);
-       
-        CopyBuffer(st_h, 1, 0, 30, st_green);
-        
-        CopyBuffer(st_h, 2, 0, 30, st);
-        
-        CopyRates(_Symbol, 0, 0, 30, rates);
-        
+
         remain_timer();
         
-        for(int i = 1 ; i < 30; i++)
+        supertrend_ontick();
+        
+        send_order_ontick();
+        
+        if(remain_time == current_period)
             {
-            
-                if(st_red[i-1] > rates[i-1].close) 
-                    {
-                    
-                        st_color[i-1] = "RED"; 
-                        
-                    } else st_color[i-1] = "GREEN";
-           
+                operation_module();
             }
-            
-        if(st_color[4] == "RED" && st_color[3] == "GREEN" && st_color[2] == "GREEN" && st_color[1] == "GREEN" && st_color[0] == "GREEN")
-            {
-                color_status = ON;    
-            }
-
-        if(color_status == ON && remain_time == current_period)        
-            {
-                
-                color_status = OFF;
-                
-                if(select_operation == ORDER_TYPE_BUY) buy_function(); 
-                
-                else if(select_operation == ORDER_TYPE_SELL) sell_function();
-                
-            }   
-
-
-
-        st_string = 
-            "      st red " + DoubleToString(st_red[0], 3) +
-            " | " 
-            " st green " + DoubleToString(st_green[0], 3) +
-            " | "
-            " st " + DoubleToString(st[0], 3);
     
         Comment(
                "\n"  
                "      Time Broker                ",         current_time,
                "\n"
                "      Remain Time               ",          remain_time,
-               "\n",               
-               "      Status                        ",      EnumToString(color_status),  
-               "\n",     
+               "\n",
+               send_order_string,
                st_string,
-               "\n",                 
-               "      ", st_color[4], " ",st_color[3], " ",st_color[2], " ",st_color[1], " ",st_color[0],
-               "\n"       
+               "\n",
+               "      Last Error [ ", last_error, " ]"              
             );
-        
-        Print(DoubleToString(st_red[0]));
 
     }

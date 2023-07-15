@@ -2,6 +2,8 @@
 
 #resource "\\Experts\\Relax\\resource\\alert.wav"
 
+MqlDateTime DateTimeStructure;
+
 input string description_remain = "       Remain Alert to Next End Candle";// ...
 
 input turn active_remain_time_alert = ON; // Active Remain Alert
@@ -22,8 +24,6 @@ int Minutes;
 
 int Seconds;
 
-MqlDateTime DateTimeStructure;
-
 int period = _Period;
 
 int m1_to_seconds = 60;
@@ -35,7 +35,7 @@ void remain_timer()
     
         period = _Period;
 
-        current_period = period * m1_to_seconds - delay_time;
+        current_period = period * m1_to_seconds;
    
         current_time = TimeCurrent();
     

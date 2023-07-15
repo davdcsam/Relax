@@ -1,8 +1,8 @@
 #include "enum.mqh"
 
-MqlTradeRequest request_trade                = {};
+MqlTradeRequest request_trade = {};
         
-MqlTradeResult result_trade                  = {};
+MqlTradeResult result_trade = {};
 
 input string description_trade = "       Data Trade";//...
 
@@ -16,13 +16,7 @@ input double takeprofit =  1500;//Take Profit
 
 input uint magic_number = 666;//Magic Number
 
-input int delay_time = 0; //Delay Time
-
 input ulong deviation_trade = 10; //Deviation in Point
-
-input turn only_me_index = ON; //Only Me /////////////////////////////////////
-
-input int only_me_limit = 0; //Max Operation Open ///////////////////////////////
 
 double price_ask;
 
@@ -31,6 +25,25 @@ double price_bid;
 double tick_size;
 
 string comment_trade;
+
+string send_order_string;
+
+void type_operation_function()
+    {
+   
+        if(select_operation == ORDER_TYPE_BUY)
+            {
+   
+                buy_function();
+   
+            } else if(select_operation == ORDER_TYPE_SELL)
+                        {
+   
+                            sell_function();
+   
+                        }
+
+    } 
 
 void sell_function()
     {
@@ -120,4 +133,21 @@ void buy_function()
    
             } else Print( request_trade.symbol, " Operation ", EnumToString( select_operation ), " ", result_trade.retcode, " ", " | Lot ", request_trade.volume, " Price ", DoubleToString( result_trade.price, _Digits ) );
 
+    }
+    
+void send_order_ontick()
+    {
+    
+        send_order_string =
+            "\n" +
+            "      Type of Operation        "       + EnumToString( select_operation ) +
+            "\n"
+            "      Lot Size                      "  + DoubleToString( lot, _Digits ) +
+            "\n"
+            "      Stop Lose                   "    + DoubleToString( stoplose, 0 ) +
+            "\n"
+            "      Take Profit                  "   + DoubleToString( takeprofit, 0 ) +
+            "\n";    
+    
+    
     }
