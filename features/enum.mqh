@@ -6,12 +6,7 @@ enum turn
 
 enum type_color
     {
-        WHITE,
-        GRAY,
-        BLACK,
         GREEN,
-        YELLOW,
-        ORANGE,
         RED
     };
 

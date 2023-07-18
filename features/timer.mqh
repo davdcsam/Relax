@@ -1,22 +1,18 @@
 #include "enum.mqh"
 
-#resource "\\Experts\\Relax\\resource\\alert.wav"
+MqlDateTime time;
 
-MqlDateTime DateTimeStructure;
+//Discomment the next variables if you need to how the time when this file was called
+//datetime start_time = TimeCurrent();
 
-input string description_remain = "       Remain Alert to Next End Candle";// ...
+//datetime local_start_time = TimeLocal();
 
-input turn active_remain_time_alert = ON; // Active Remain Alert
-
-input int alert_remain_time = 6; // Seconds to Alert
-
-datetime start_time = TimeCurrent();
-
-datetime local_start_time = TimeLocal();
-
+//Define the variable for get time in timer_ontick()
 datetime current_time;
 
 int remain_time;
+
+int Day;
 
 int Hours; 
 
@@ -24,36 +20,47 @@ int Minutes;
 
 int Seconds;
 
-int period = _Period;
+int period;
 
 int m1_to_seconds = 60;
 
 int current_period;
 
-void remain_timer() 
+string timer_string;
+
+//timer_ontick() necessarily need to be in ontick event handler
+void timer_ontick()
     {
-    
+        //Obtain the current period in the graph
         period = _Period;
 
         current_period = period * m1_to_seconds;
    
+        //Update the value of current_time
         current_time = TimeCurrent();
-    
-        remain_time = (int)( ( (TimeCurrent() / (Period() *60)) * Period() * 60 + Period() * 60 ) - current_time );
-      
-        TimeToStruct(current_time, DateTimeStructure);
+        
+        //iTime obtain the opening date of the current candlestick
+        //Subtracting the current_time from the opening time of a candlestick gives a negative number representing how much time has elapsed since the candlestick opened
+        //To make the number positive, current_period is added to it, which represents the time needed to create the next candle.
+        //(int) is used to convert the output of curren_time, iTime and current_period to an integer. 
+        remain_time = (int)(iTime(_Symbol, PERIOD_CURRENT, 0) - current_time + current_period);
+        
+        //The next struct is use to get the current time and date with for indepents integer variables
+        TimeToStruct(current_time, time);
+        
+        Day = time.day;
        
-        Hours = DateTimeStructure.hour;
+        Hours = time.hour;
        
-        Minutes = DateTimeStructure.min;
+        Minutes = time.min;
        
-        Seconds = DateTimeStructure.sec + 1;
-       
-        if(alert_remain_time == remain_time && active_remain_time_alert == ON)
-            {
-         
-                PlaySound("\\Experts\\Relax\\resource\\alert.wav");
-          
-            }
-
+        Seconds = time.sec;
+        
+        //This string is use to bring timer data in Comment in main file
+        timer_string =                
+               "\n" +
+               "      TIME " + IntegerToString(time.year) + "." + IntegerToString(time.mon) + "." + IntegerToString(time.day) + " " + IntegerToString(Hours) + ":" + IntegerToString(Minutes) + ":" + IntegerToString(Seconds) + " to UTS " + IntegerToString(current_time) +
+               "\n"
+               "      Remain Time               " + IntegerToString(remain_time) +
+               "\n";        
 }

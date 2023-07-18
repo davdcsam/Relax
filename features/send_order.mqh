@@ -4,19 +4,19 @@ MqlTradeRequest request_trade = {};
         
 MqlTradeResult result_trade = {};
 
-input string description_trade = "       Data Trade";//...
+input group "Data Trade"
 
 input ENUM_ORDER_TYPE select_operation = ORDER_TYPE_BUY;// Select Type of Operation
 
 input double lot = 1;//Lot Size
 
-input double stoplose = 1500;//Stop Lose
+input double stoplose = 150;//Stop Loss in Points
 
-input double takeprofit =  1500;//Take Profit
+input double takeprofit =  150;//Take Profit in Points
 
-input uint magic_number = 666;//Magic Number
+input uint magic_number = 1;//Magic Number
 
-input ulong deviation_trade = 10; //Deviation in Point
+input ulong deviation_trade = 10; //Deviation in Points
 
 double price_ask;
 
@@ -46,23 +46,15 @@ void type_operation_function()
     } 
 
 void sell_function()
-    {
-    
-        price_ask                              = SymbolInfoDouble( _Symbol, SYMBOL_ASK );
-   
-        price_bid                              = SymbolInfoDouble( _Symbol, SYMBOL_BID );
-   
-        tick_size                              = SymbolInfoDouble( _Symbol, SYMBOL_TRADE_TICK_SIZE );
-   
-        price_ask                              = round( price_ask / tick_size ) * tick_size;
-   
-        price_bid                              = round( price_bid / tick_size ) * tick_size;          
+    {         
         
         Print( "Sending SELL order in ", _Symbol, " with ", magic_number ); 
    
         comment_trade                          = EnumToString( select_operation ) + " " + _Symbol + " with " + string( magic_number );
    
         request_trade.action                   = TRADE_ACTION_DEAL;
+   
+        request_trade.type_filling             = SYMBOL_FILLING_FOK;   
    
         request_trade.symbol                   = _Symbol;
    
@@ -92,21 +84,13 @@ void sell_function()
     }
   
 void buy_function()
-    {
-    
-        price_ask                              = SymbolInfoDouble( _Symbol, SYMBOL_ASK );
-   
-        price_bid                              = SymbolInfoDouble( _Symbol, SYMBOL_BID );
-   
-        tick_size                              = SymbolInfoDouble( _Symbol, SYMBOL_TRADE_TICK_SIZE );
-   
-        price_ask                              = round( price_ask / tick_size ) * tick_size;
-   
-        price_bid                              = round( price_bid / tick_size ) * tick_size;        
+    {       
         
         Print( "Sending BUY order in ", _Symbol, " with ", magic_number );
    
         request_trade.action                   = TRADE_ACTION_DEAL;
+        
+        request_trade.type_filling             = SYMBOL_FILLING_FOK;        
    
         request_trade.symbol                   = _Symbol;
    
@@ -137,6 +121,16 @@ void buy_function()
     
 void send_order_ontick()
     {
+
+        price_ask                              = SymbolInfoDouble( _Symbol, SYMBOL_ASK );
+   
+        price_bid                              = SymbolInfoDouble( _Symbol, SYMBOL_BID );
+   
+        tick_size                              = SymbolInfoDouble( _Symbol, SYMBOL_TRADE_TICK_SIZE );
+   
+        price_ask                              = round( price_ask / tick_size ) * tick_size;
+   
+        price_bid                              = round( price_bid / tick_size ) * tick_size;     
     
         send_order_string =
             "\n" +

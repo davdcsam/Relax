@@ -1,10 +1,10 @@
 //+------------------------------------------------------------------+
 //|                                                           st.mq5 |
-//|                                         Copyright 2023, DavdCsam |
-//|                                      https://github.com/davdcsam |
+//|                                          Copyright 2023, Fx Geek |
+//|                             https://www.mql5.com/en/users/fxgeek |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2023, DavdCsam"
-#property link      "https://github.com/davdcsam"
+#property copyright "Copyright 2016, Fx Geek"
+#property link      "https://www.mql5.com/en/users/fxgeek"
 #property version   "1.0"
 #property indicator_chart_window
 #property indicator_buffers 9

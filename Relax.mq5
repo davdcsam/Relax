@@ -1,6 +1,6 @@
 //+------------------------------------------------------------------+
 //|                                                        Relax.mq5 |
-//|                                         Copyright 2023, DavdCsam |
+//|                                         Copyright 2023, davdcsam |
 //|                                      https://github.com/davdcsam |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2023, DavdCsam"
@@ -51,7 +51,7 @@ void operation_module()
                  break;
                  
                 default:
-                    last_error = "Out Range in Swicth Operator / Operation Module";
+                    last_error = "Out Range in Swicth Operator / Operation Module [Max allowed 1-5]";
                  break;
             }
             
@@ -82,7 +82,7 @@ void OnDeinit( const int reason )
 void OnTick(void)
     {
 
-        remain_timer();
+        timer_ontick();
         
         supertrend_ontick();
         
@@ -94,11 +94,7 @@ void OnTick(void)
             }
     
         Comment(
-               "\n"  
-               "      Time Broker                ",         current_time,
-               "\n"
-               "      Remain Time               ",          remain_time,
-               "\n",
+               timer_string,
                send_order_string,
                st_string,
                "\n",

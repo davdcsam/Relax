@@ -2,7 +2,7 @@
 
 MqlRates rates[];
 
-input string description_st = "       SuperTrend"; //...
+input group "SuperTrend"
 
 input int st_periode = 10; //Period
 
@@ -10,7 +10,7 @@ input double st_multiplier = 1; //Multiplier
 
 input bool st_show_filling = true; //Show Filling
 
-input type_color st_select_color = RED; //Color Count [Only use RED or GREEN]
+input type_color st_select_color = RED; //Color Count
 
 input char st_count = 3; //Count Trend
 
