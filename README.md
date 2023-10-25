@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Relax
 
 Relax fue creado davdcsam a petición del grupo de trading Project Crecer. Esta disponible en el repositorio https://github.com/davdcsam/Relax.
@@ -55,3 +56,20 @@ Algunas recomendaciones para mejorar la estrategia son las siguientes:
 •	Utilizar una gestión activa del riesgo, que modifique el nivel de stop loss o take profit según el comportamiento del mercado, como el trailing stop, el breakeven, el cierre parcial, etc.
 •	Realizar un análisis previo del mercado, para identificar los posibles escenarios y las oportunidades de trading, como los niveles de soporte y resistencia, las zonas de sobrecompra y sobreventa, los patrones de velas, etc.
 •	Realizar un backtesting exhaustivo y riguroso, utilizando diferentes instrumentos financieros, marcos de tiempo, períodos históricos y valores de entrada, para evaluar el rendimiento y la robustez de la estrategia.
+=======
+# MQL5_Team
+This is ExpertAbvisor than use the first strategic with SuperTrend Indicator
+
+
+DAV
+~/AppData/Roaming/MetaQuotes/Terminal/D0E8209F77C8CF37AD8BF550E51FF075/MQL5/Experts/Relax
+
+SIL
+~/AppData/Roaming/MetaQuotes/Terminal/BB16F565FAAA6B23A20C26C49416FF05/MQL5/Experts
+
+HEN
+~/AppData/Roaming/MetaQuotes/Terminal/D0E8209F77C8CF37AD8BF550E51FF075/MQL5/Experts
+
+CAR
+~/AppData/Roaming/MetaQuotes/Terminal/1640F6577B1C4EC659BF41EA9F6C38ED/MQL5/Experts
+>>>>>>> 914561458cb247bf553b0b883828f064b4697034
