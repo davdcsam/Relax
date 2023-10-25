@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Relax
 
 Relax fue creado davdcsam a petición del grupo de trading Project Crecer. Esta disponible en el repositorio https://github.com/davdcsam/Relax.
